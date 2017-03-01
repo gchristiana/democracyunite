@@ -1,0 +1,251 @@
+<head>
+<title>Pillars of Democracy</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@DemocracyUnite">
+<meta name="twitter:title" content="The Three Pillars of Democracy">
+<meta name="twitter:description" content="The Pillars of Democracy - Constitution, Institutions, and Norms - are the foundation of American liberty and prevent America from sliding into authoritarianism. This is a catalog of incidents that threaten these pillars.">
+<meta name="twitter:image" content="http://democracyunite.com/pillars-landscape2.png">
+<meta property="og:title" content="The Three Pillars of Democracy">
+<meta property="og:description" content="The Pillars of Democracy - Constitution, Institutions, and Norms - are the foundation of American liberty and prevent America from sliding into authoritarianism. This is a catalog of incidents that threaten these pillars.">
+<meta property="og:image" content="http://democracyunite.com/pillars-landscape2.png">
+<style>
+.paragraph { margin-bottom: 20px; }
+.category { position:absolute; }
+.category:hover { border:4px solid black; background-color:#ff0; opacity:0.2; }
+a {
+  color: blue;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+ul.menu {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #44f;
+}
+li.menuitem { float: left; }
+li.menuitem a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-weight: bold;
+}
+li.menuitem a:hover:not(.active) { background-color: #f44; }
+.active { background-color: #c44; }
+</style>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-92545158-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+<script type="text/javascript">
+var SCROLLBAR_WIDTH = 17;
+var pillars = null;  // Initialized in initPage so window.innerWidth is stable.
+function initCategory(pillar, category) {
+  var pillarData = pillars[pillar];
+  if (!pillarData) {
+    console.log("Unknown pillar name: " + pillar);
+    return;
+  }
+  var row = parseInt(category.getAttribute("data-row"));
+  var col = parseInt(category.getAttribute("data-col"));
+  category.style.left = (pillarData.left + col * pillarData.width) + "px";
+  category.style.top = (pillarData.top + row * pillarData.height) + "px";
+  category.style.width = pillarData.width;
+  category.style.height = pillarData.height;
+}
+function getSheetUrl(sheetId) {
+  return "https://docs.google.com/spreadsheets/d/1hXyoaL5LfetOYNyAVaCP2uvE4bIMo9LQuAqgJSRg5QI/pubhtml" +
+      "?gid=" + sheetId + "&widget=false&chrome=false";
+}
+function scrollToFrameAnchor() {
+  var scrollAnchor = document.getElementById("scrollAnchor");
+  if (scrollAnchor.scrollIntoView) {
+    scrollAnchor.scrollIntoView();
+  }
+}
+function selectAll() {
+  scrollToFrameAnchor();
+  document.getElementById("details_frame").src = getSheetUrl("388168553");
+  document.getElementById("category_container").style.display = "none";
+  document.getElementById("all_container").style.display = "block";
+}
+function selectCategory(title, sheetId) {
+  scrollToFrameAnchor();
+  document.getElementById("details_frame").src = getSheetUrl(sheetId);
+  document.getElementById("category_title").innerHTML = title;
+
+  document.getElementById("all_container").style.display = "none";
+  document.getElementById("category_container").style.display = "block";
+}
+function initPage() {
+  var maxWidth = 600;
+  var imageWidth = Math.min(window.innerWidth, maxWidth);
+  if (screen.width < 500) {  // proxy for "is mobile?"
+    imageWidth = window.innerWidth - 25;
+  }
+  var pillarsImg = document.getElementById("pillarsImg");
+  pillarsImg.width = imageWidth;
+  pillarsImg.style.display = "block";
+  var detailsFrame = document.getElementById("details_frame");
+  detailsFrame.style.width =
+      (window.innerWidth - SCROLLBAR_WIDTH) + "px";
+  detailsFrame.src = getSheetUrl("0");
+  document.getElementById("details").style.display = "block";
+
+  // Initial dimensions based on maxWidth of pillarsImg. Scale down from there.
+  /*
+  pillars = {
+    constitution: { top: 270, left: 45, width: 75, height: 164, color: "#ff0" },
+    institutions: { top: 270, left: 230, width: 74, height: 110, color: "#ff0" },
+    norms:        { top: 270, left: 414, width: 75, height: 66, color: "#ff0" }
+  };
+  */
+  pillars = {
+    constitution: { top: 240, left: 36, width: 75, height: 164, color: "#ff0" },
+    institutions: { top: 240, left: 221, width: 74, height: 110, color: "#ff0" },
+    norms:        { top: 240, left: 405, width: 75, height: 66, color: "#ff0" }
+  };
+  for (var pillarName in pillars) {
+    if (pillars.hasOwnProperty(pillarName)) {
+      var pillar = pillars[pillarName];
+      pillar.top = parseInt(pillar.top * imageWidth / maxWidth);
+      pillar.left = parseInt(pillar.left * imageWidth / maxWidth);
+      pillar.width = parseInt(pillar.width * imageWidth / maxWidth);
+      pillar.height = parseInt(pillar.height * imageWidth / maxWidth);
+      var categories = document.getElementsByClassName(pillarName);
+      for (var i = 0; i < categories.length; i++) {
+        initCategory(pillarName, categories.item(i));
+      }
+    }
+  }
+  var paragraphs = document.getElementsByClassName("paragraph");
+  for (var i = 0; i < paragraphs.length; i++) {
+    paragraphs.item(i).style.width = imageWidth + "px";
+  }
+  document.getElementById("menubar").style.width = imageWidth + "px";
+}
+</script>
+</head>
+
+<body style="font-family: Arial" onload='initPage()'>
+<ul class="menu" id="menubar">
+  <li class="menuitem"><a href="/">Home</a></li>
+  <li class="menuitem"><a class="active" href="/pillars">Pillars</a></li>
+  <li class="menuitem"><a href="/press">Press</a></li>
+  <li class="menuitem" style="float:right"><a target="_blank" href="https://twitter.com/DemocracyUnite"><img width="22" src="../Twitter_Logo_White.png"></a></li>
+  <li class="menuitem" style="float:right"><a href="https://docs.google.com/forms/d/e/1FAIpQLScfrbys_Rb0htdeK_aAq4rVoEWiUhyW-7jMfyLw-gaQRQz3Ug/viewform">Join</a></li>
+</ul>
+
+<div>
+<h2>The Three Pillars of Democracy</h2>
+<!--
+<img style="float:right" src="../du-logo-large.png" width=350>
+-->
+<h3> An Interactive Catalog of Threats</h3>
+
+<div class="paragraph">
+The Pillars of Democracy &mdash; <b>Constitution, Institutions, and Norms</b>
+&mdash; are the foundation of American liberty and prevent America from sliding
+into authoritarianism. This is a catalog of incidents that threaten these
+pillars. Our mission: Unite Americans across party lines to defend and
+strengthen our democracy.
+</div>
+
+<div class="paragraph">
+Follow us on Twitter for weekly updates
+<a href="https://twitter.com/DemocracyUnite"><img
+  width=32 style="vertical-align:middle" src="../Twitter_Logo_Blue.png"></a>
+<a href="https://twitter.com/DemocracyUnite">@DemocracyUnite</a>
+</div>
+
+<div id="content" style="position:absolute">
+  <a name="top"></a>
+  <img id="pillarsImg" width=600 src="../pillars.png">
+
+  <div class="constitution category" data-row=0 data-col=0
+      onclick="selectCategory('Constitution: Bill of Rights', '335862566')"></div>
+  <div class="constitution category" data-row=0 data-col=1
+      onclick="selectCategory('Constitution: Executive Overreach / Separation of Powers', '1387541269')"></div>
+  <div class="constitution category" data-row=1 data-col=0
+      onclick="selectCategory('Constitution: Emoluments', '1861569500')"></div>
+  <div class="constitution category" data-row=1 data-col=1
+      onclick="selectCategory('Constitution: Other Law-Breaking', '445865692')"></div>
+
+  <div class="institutions category" data-row=0 data-col=0
+      onclick="selectCategory('Institutions: Free Press', '748466223')"></div>
+  <div class="institutions category" data-row=0 data-col=1
+      onclick="selectCategory('Institutions: Independent Judiciary', '153753693')"></div>
+  <div class="institutions category" data-row=1 data-col=0
+      onclick="selectCategory('Institutions: Secure, Credible Elections', '1636739120')"></div>
+  <div class="institutions category" data-row=1 data-col=1
+      onclick="selectCategory('Institutions: Intelligence Community', '1101855777')"></div>
+  <div class="institutions category" data-row=2 data-col=0
+      onclick="selectCategory('Institutions: Government that Works for People', '452307089')"></div>
+  <div class="institutions category" data-row=2 data-col=1
+      onclick="selectCategory('Institutions: Transparency & Ethics', '443122115')"></div>
+
+  <div class="norms category" data-row=0 data-col=0
+      onclick="selectCategory('Norms: Conflicts of Interest', '1971828273')"></div>
+  <div class="norms category" data-row=0 data-col=1
+      onclick="selectCategory('Norms: Relations with Allies', '820376152')"></div>
+  <div class="norms category" data-row=1 data-col=0
+      onclick="selectCategory('Norms: Ally with Enemy or Admire Dictators', '884675167')"></div>
+  <div class="norms category" data-row=1 data-col=1
+      onclick="selectCategory('Norms: Denigrate USA', '127433537')"></div>
+  <div class="norms category" data-row=2 data-col=0
+      onclick="selectCategory('Norms: Crony Capitalism / Bully Private Corporations', '200249954')"></div>
+  <div class="norms category" data-row=2 data-col=1
+      onclick="selectCategory('Norms: Truth & Facts', '746442445')"></div>
+  <div class="norms category" data-row=3 data-col=0
+      onclick="selectCategory('Norms: Class & Humility', '103691220')"></div>
+  <div class="norms category" data-row=3 data-col=1
+      onclick="selectCategory('Norms: Prejudice', '1606502012')"></div>
+  <div class="norms category" data-row=4 data-col=0
+      onclick="selectCategory('Norms: Strongman Behavior', '1248046081')"></div>
+  <div class="norms category" data-row=4 data-col=1
+      onclick="selectCategory('Norms: Other (Judgment, Competence, etc)', '1435328518')"></div>
+
+  <br>
+  <span id="scrollAnchor"></span> <!-- scroll here when a category is selected -->
+  <div id="all_container">
+    <span style="font-weight:bold">
+      Select a category within the pillars to filter threats.
+    </span>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    showing all &nbsp; | &nbsp; <a href="#top">back to top</a>
+  </div>
+  <div id="category_container" style="display:none">
+    <span id="category_title" style="font-weight:bold">Pillar: Category</span>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="javascript:selectAll()">show all</a> &nbsp; | &nbsp; <a href="#top">back to top</a>
+  </div>
+  <br>
+  <div id="details" style="display:none; -webkit-overflow-scrolling: touch; overflow-y: scroll;">
+    <iframe id="details_frame" width="100%" height="85%" frameborder="0"></iframe>
+  </div>
+  <br>
+  <div class="paragraph">
+  Thanks to those who inspired us, began the hard work of cataloging before we did, and gave us a running start:
+  <ul>
+    <li>Amy Siskind, <a href="https://medium.com/@Amy_Siskind/week-9-experts-in-authoritarianism-advise-to-keep-a-list-of-things-subtly-changing-around-you-so-4bc574668100#.eqz85fkla">"Experts In Authoritarianism Advise You to Keep a List of Things Subtly Changing Around You"</a><br>
+    <li><a href="https://www.thestar.com/news/world/2017/02/03/daniel-dales-donald-trump-fact-check-updates.html">The Toronto Star</a><br>
+    <li><a href="https://www.washingtonpost.com/news/the-fix/wp/2017/02/21/donald-trumps-unbroken-streak-of-falsehoods-now-stands-at-33-days/?utm_term=.baabaaec4f25">The Washington Post</a><br>
+    <li>Other items compiled from various newssources (citations provided wherever possible)<br>
+  </ul>
+  <br>
+  <div style="font-size:80%;text-align:center">&copy; DemocracyUnite 2017</div>
+  <br>
+  </div>
+</body>
